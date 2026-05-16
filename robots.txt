@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sampark-lodge.github.io/wifi-qr-generator/sitemap.xml

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vCard QR Generator - Digital Business Card with QR Code</title>
+  <meta name="description" content="Create a digital business card with a scannable vCard QR code. Share contact info instantly — name, phone, email, company, website. Free, private, offline.">
+  <meta name="keywords" content="vCard QR generator, digital business card, QR code contact, share contact info, vCard QR code, electronic business card, NFC alternative">
+  <meta name="author" content="vCard QR">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="google-adsense-account" content="ca-pub-9325652578538740">
+  <link rel="canonical" href="https://sampark-lodge.github.io/wifi-qr-generator/vcard-qr/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="vCard QR Code Generator">
+  <meta property="og:description" content="Create a digital business card with a scannable vCard QR code. Share contact info instantly.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sampark-lodge.github.io/wifi-qr-generator/vcard-qr/">
+  <meta property="og:image" content="https://sampark-lodge.github.io/wifi-qr-generator/vcard-qr/vcard-qr-preview.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="vCard QR Code Generator">
+  <meta name="twitter:description" content="Create a digital business card with a scannable vCard QR code. Share contact info instantly.">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9325652578538740" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0f0f0f;
+      --card-bg: #1a1a1a;
+      --input-bg: #2a2a2a;
+      --accent: #00d4aa;
+      --accent-hover: #00f0c0;
+      --text: #ffffff;
+      --text-muted: #888888;
+      --border: #333333;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 20px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .form-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.15);
+    }
+
+    .field input::placeholder {
+      color: #555;
+    }
+
+    .qrcode-section {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .qrcode-wrapper {
+      display: inline-block;
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    #qrcode {
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qrcode img {
+      display: block;
+    }
+
+    .placeholder-text {
+      color: var(--text-muted);
+      font-size: 14px;
+      padding: 60px;
+    }
+
+    .card-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .card-section h2 {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .card-name {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .card-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--border);
+      margin: 0 auto 20px;
+      border-radius: 1px;
+    }
+
+    .card-details {
+      text-align: left;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    .card-detail {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-detail:last-child {
+      border-bottom: none;
+    }
+
+    .card-detail svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+    }
+
+    .card-detail .detail-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .card-detail .detail-value {
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    .card-detail .detail-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 24px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 20px 0;
+    }
+
+    .footer svg {
+      display: inline;
+      vertical-align: middle;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+        margin: 0;
+      }
+      .header,
+      .form-section,
+      .qrcode-section,
+      .actions,
+      .footer,
+      .adsense-container {
+        display: none !important;
+      }
+
+      .card-section {
+        background: #fff;
+        border: 2px solid #000;
+        border-radius: 8px;
+        padding: 24px;
+        margin: 20mm auto;
+        max-width: 300px;
+        page-break-inside: avoid;
+        box-shadow: none;
+      }
+
+      .card-section h2 {
+        color: #666;
+      }
+      .card-name {
+        color: #000;
+      }
+      .card-title {
+        color: #008f6b;
+      }
+      .card-detail .detail-value {
+        color: #000;
+      }
+      .card-detail svg {
+        color: #008f6b;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 20px 12px;
+      }
+      .header h1 {
+        font-size: 24px;
+      }
+      .form-section {
+        padding: 20px;
+      }
+      .form-section,
+      .card-section {
+        padding: 20px;
+      }
+      .card-name {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>vCard QR</h1>
+      <p>Create a scannable digital business card</p>
+    </div>
+
+    <div class="form-section">
+      <div class="field">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" placeholder="John Doe" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" placeholder="+1 555-123-4567" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="john@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="company">Company</label>
+        <input type="text" id="company" placeholder="Acme Inc." autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="jobtitle">Job Title</label>
+        <input type="text" id="jobtitle" placeholder="Software Engineer">
+      </div>
+      <div class="field">
+        <label for="website">Website</label>
+        <input type="url" id="website" placeholder="https://example.com">
+      </div>
+    </div>
+
+    <div class="qrcode-section" id="qrSection">
+      <div class="qrcode-wrapper">
+        <div id="qrcode">
+          <div class="placeholder-text">Fill in your details<br>to generate your vCard QR</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-section" id="cardSection">
+      <h2>Digital Business Card</h2>
+      <div class="card-name" id="cardName">—</div>
+      <div class="card-title" id="cardTitle">—</div>
+      <div class="card-divider"></div>
+      <div class="card-details" id="cardDetails">
+        <div class="card-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <div class="detail-content">
+            <span class="detail-label">Phone</span>
+            <span class="detail-value" id="displayPhone">—</span>
+          </div>
+        </div>
+        <div class="card-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <div class="detail-content">
+            <span class="detail-label">Email</span>
+            <span class="detail-value" id="displayEmail">—</span>
+          </div>
+        </div>
+        <div class="card-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <div class="detail-content">
+            <span class="detail-label">Website</span>
+            <span class="detail-value" id="displayWebsite">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="printBtn">🖨️ Print Card</button>
+      <button class="btn btn-secondary" id="downloadBtn">⬇️ Download QR</button>
+    </div>
+
+    <div class="footer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Your contact info never leaves your device. No data stored.
+      <br>
+      <a href="https://sampark-lodge.github.io/wifi-qr-generator/">WiFi QR Generator</a>
+    </div>
+
+    <div class="adsense-container" style="margin-top: 24px; min-height: 90px; text-align: center;">
+      <!-- AdSense ad unit will render here -->
+    </div>
+  </div>
+
+  <script>
+    let qrCodeInstance = null;
+    const MIN_QR_FIELDS = 2;
+
+    const fields = ['fullname', 'phone', 'email', 'company', 'jobtitle', 'website'];
+    const displayMap = {
+      'fullname': ['cardName', 'cardName'],
+      'phone': ['displayPhone', 'displayPhone'],
+      'email': ['displayEmail', 'displayEmail'],
+      'company': ['cardTitle', 'cardTitle'],
+      'website': ['displayWebsite', 'displayWebsite']
+    };
+
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', updateCard);
+      }
+    });
+
+    function buildVCard() {
+      const fn = document.getElementById('fullname').value.trim();
+      const tel = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const org = document.getElementById('company').value.trim();
+      const title = document.getElementById('jobtitle').value.trim();
+      const url = document.getElementById('website').value.trim();
+
+      let lines = [];
+      lines.push('BEGIN:VCARD');
+      lines.push('VERSION:3.0');
+
+      if (fn) {
+        const parts = fn.split(' ').filter(Boolean);
+        const given = parts[0] || '';
+        const family = parts.slice(1).join(' ') || '';
+        lines.push(`N:${family};${given};;;`);
+        lines.push(`FN:${fn}`);
+      }
+      if (tel) lines.push(`TEL;TYPE=CELL:${tel}`);
+      if (email) lines.push(`EMAIL:${email}`);
+      if (org) lines.push(`ORG:${org}`);
+      if (title) lines.push(`TITLE:${title}`);
+      if (url) lines.push(`URL:${url}`);
+
+      lines.push('END:VCARD');
+      return lines.join('\n');
+    }
+
+    function countFilled() {
+      let count = 0;
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value.trim()) count++;
+      });
+      return count;
+    }
+
+    function updateCard() {
+      const fn = document.getElementById('fullname').value.trim() || '—';
+      const tel = document.getElementById('phone').value.trim() || '—';
+      const email = document.getElementById('email').value.trim() || '—';
+      const org = document.getElementById('company').value.trim();
+      const title = document.getElementById('jobtitle').value.trim();
+      const url = document.getElementById('website').value.trim() || '—';
+
+      document.getElementById('cardName').textContent = fn;
+      document.getElementById('cardTitle').textContent = org ? (title ? `${title} · ${org}` : org) : (title || '—');
+      document.getElementById('displayPhone').textContent = tel;
+      document.getElementById('displayEmail').textContent = email;
+      document.getElementById('displayWebsite').textContent = url;
+
+      regenerateQR();
+    }
+
+    function regenerateQR() {
+      const qrContainer = document.getElementById('qrcode');
+      const filled = countFilled();
+
+      if (filled < MIN_QR_FIELDS) {
+        qrContainer.innerHTML = '<div class="placeholder-text">Fill in your details<br>to generate your vCard QR</div>';
+        return;
+      }
+
+      const vcardStr = buildVCard();
+
+      // Clear and regenerate
+      qrContainer.innerHTML = '';
+      const qrSize = Math.min(260, window.innerWidth - 80);
+
+      try {
+        qrCodeInstance = new QRCode(qrContainer, {
+          text: vcardStr,
+          width: qrSize,
+          height: qrSize,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch (e) {
+        qrContainer.innerHTML = '<div class="placeholder-text">Error generating QR</div>';
+      }
+    }
+
+    document.getElementById('printBtn').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const img = document.querySelector('#qrcode img');
+      if (img) {
+        const link = document.createElement('a');
+        link.download = 'vcard-qr.png';
+        link.href = img.src;
+        link.click();
+      } else {
+        alert('Generate a QR code first by filling in your details.');
+      }
+    });
+
+    // Initial render
+    updateCard();
+  </script>
+</body>
+</html>
